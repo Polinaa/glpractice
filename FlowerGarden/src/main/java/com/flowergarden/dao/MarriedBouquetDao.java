@@ -1,4 +1,4 @@
 package com.flowergarden.dao;
 
-public class MarriedBouquetDao extends BouquetDao {
+public class MarriedBouquetDao implements BouquetDao {
 }

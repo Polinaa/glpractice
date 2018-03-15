@@ -1,6 +1,14 @@
 package com.flowergarden.flowers;
 
 
-public class Tulip extends GeneralFlower {	
+import com.flowergarden.properties.FreshnessInteger;
+
+public class Tulip extends GeneralFlower {
+
+    public Tulip(int lenght, float price, FreshnessInteger fresh){
+        this.lenght = lenght;
+        this.price = price;
+        this.freshness = fresh;
+    }
 
 }

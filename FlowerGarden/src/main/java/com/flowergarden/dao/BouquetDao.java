@@ -1,4 +1,7 @@
 package com.flowergarden.dao;
 
-public class BouquetDao {
+public interface BouquetDao {
+
+//    void saveBouquet();
+//    void deleteBouquet();
 }
