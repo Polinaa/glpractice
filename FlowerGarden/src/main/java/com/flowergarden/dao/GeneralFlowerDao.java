@@ -74,7 +74,7 @@ public abstract class GeneralFlowerDao implements FlowerDao {
     }
 
     private Flower createFlowerInstance(String type, int length, int freshness, float price, int petals,
-                                        boolean spike) {
+                                                                 boolean spike) {
         FreshnessInteger freshnessInteger = new FreshnessInteger(freshness);
         switch (type) {
             case "rose":
