@@ -10,12 +10,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class RoseDaoImpl extends GeneralFlowerDao {
-    private static final String type = "rose";
 
     {
         //TODO:length
         this.SAVE_FLOWER_QUERY = "INSERT INTO flower" + "(name, lenght, freshness, price, spike)" + "VALUES"
                                + "(?, ?, ?, ?, ?)";
+        this.type = "rose";
     }
 
     public RoseDaoImpl(Connection connection) {

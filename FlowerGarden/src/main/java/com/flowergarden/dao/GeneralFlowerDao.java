@@ -12,9 +12,11 @@ import java.util.List;
 
 public abstract class GeneralFlowerDao implements FlowerDao {
 
+    protected String type;
+
     private final static String DELETE_BY_ID = "DELETE FROM flower WHERE id = ?";
 
-    private final static String SELECT_ALL_QUERY = "select * from flower";
+    protected String SELECT_ALL_QUERY = "select * from flower where name=" + type;
 
     private Connection connection;
 

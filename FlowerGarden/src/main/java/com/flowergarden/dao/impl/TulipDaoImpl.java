@@ -9,11 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class TulipDaoImpl extends GeneralFlowerDao {
-    private static final String type = "tulip";
 
     {
         //TODO:length
         this.SAVE_FLOWER_QUERY = "INSERT INTO flower" + "(name, lenght, freshness, price)" + "VALUES" + "(?, ?, ?, ?)";
+        this.type = "tulip";
     }
 
     public TulipDaoImpl(Connection connection) {

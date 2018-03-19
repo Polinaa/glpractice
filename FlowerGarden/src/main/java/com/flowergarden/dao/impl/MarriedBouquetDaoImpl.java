@@ -1,9 +1,9 @@
 package com.flowergarden.dao.impl;
 
 import com.flowergarden.bouquet.Bouquet;
+import com.flowergarden.bouquet.MarriedBouquet;
 import com.flowergarden.dao.BouquetDao;
-import com.flowergarden.dao.GeneralFlowerDao;
-import com.flowergarden.flowers.Flower;
+import com.flowergarden.flowers.GeneralFlower;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,13 +15,9 @@ public class MarriedBouquetDaoImpl implements BouquetDao {
 
     private final static String SELECT_ALL_QUERY = "select * from bouquet";
 
-    private static final GeneralFlowerDao generalFlowerDao = new GeneralFlowerDao() {
-        @Override
-        protected void populateInsertPrepareStatement(PreparedStatement preparedStatement, Flower flower)
-            throws SQLException {
-
-        }
-    }
+    private static RoseDaoImpl roseDao;
+    private static ChamomileDaoImpl chamomileDao;
+    private static TulipDaoImpl tulipDao;
 
     private Connection connection;
 
@@ -29,6 +25,9 @@ public class MarriedBouquetDaoImpl implements BouquetDao {
 
     public MarriedBouquetDaoImpl(Connection connection) {
         this.connection = connection;
+        roseDao = new RoseDaoImpl(connection);
+        chamomileDao = new ChamomileDaoImpl(connection);
+        tulipDao = new TulipDaoImpl(connection);
     }
 
     @Override
@@ -66,14 +65,13 @@ public class MarriedBouquetDaoImpl implements BouquetDao {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
                 float assemblePrice = rs.getFloat("assemble_price");
-                List <Flower> flowers =
-//                int petals = rs.getInt("petals");
-//                boolean spike = rs.getBoolean("spike");
-////                int bouquetId = rs.getInt("bouquet_id");
-//                Bouquet bouquet = new MarriedBouquet();
-//                bouquets.add(bouquet);
+                MarriedBouquet bouquet = new MarriedBouquet();
+                bouquet.setAssembledPrice(assemblePrice);
+                roseDao.findFlowers().forEach(f -> bouquet.addFlower((GeneralFlower) f));
+                chamomileDao.findFlowers().forEach(f -> bouquet.addFlower((GeneralFlower) f));
+                tulipDao.findFlowers().forEach(f -> bouquet.addFlower((GeneralFlower) f));
+                bouquets.add(bouquet);
             }
-
 //            int count = rs.getMetaData().getColumnCount();
 //            for (int i = 1; i<= count; i++) {
 //                System.out.println(rs.getMetaData().getColumnTypeName(i) + " " + rs.getMetaData().getColumnName(i));

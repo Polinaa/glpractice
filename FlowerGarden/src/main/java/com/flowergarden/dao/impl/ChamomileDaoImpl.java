@@ -10,12 +10,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class ChamomileDaoImpl extends GeneralFlowerDao {
-    private static final String type = "chamomile";
 
     {
         //TODO:length
         this.SAVE_FLOWER_QUERY =
             "INSERT INTO flower" + "(name, lenght, freshness, price, petal)" + "VALUES" + "(?, ?, ?, ?, ?)";
+        this.type = "chamomile";
     }
 
     public ChamomileDaoImpl(Connection connection) {
