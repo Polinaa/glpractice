@@ -45,40 +45,33 @@ public class MarriedBouquetDaoImpl implements BouquetDao {
     }
 
     @Override
-    public void deleteBouquetById(int id) {
-        try {
-            PreparedStatement st = connection.prepareStatement(DELETE_BY_ID);
-            st.setInt(1, id);
-            st.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void deleteBouquetById(int id) throws SQLException {
+        PreparedStatement st = connection.prepareStatement(DELETE_BY_ID);
+        st.setInt(1, id);
+        st.executeUpdate();
     }
 
     @Override
-    public List<Bouquet> findBouquets() {
+    public List<Bouquet> findBouquets() throws SQLException {
         List<Bouquet> bouquets = new ArrayList<>();
-        try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(SELECT_ALL_QUERY);
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                float assemblePrice = rs.getFloat("assemble_price");
-                MarriedBouquet bouquet = new MarriedBouquet();
-                bouquet.setAssembledPrice(assemblePrice);
-                roseDao.findFlowers().forEach(f -> bouquet.addFlower((GeneralFlower) f));
-                chamomileDao.findFlowers().forEach(f -> bouquet.addFlower((GeneralFlower) f));
-                tulipDao.findFlowers().forEach(f -> bouquet.addFlower((GeneralFlower) f));
-                bouquets.add(bouquet);
-            }
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(SELECT_ALL_QUERY);
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            float assemblePrice = rs.getFloat("assemble_price");
+            MarriedBouquet bouquet = new MarriedBouquet();
+            bouquet.setAssembledPrice(assemblePrice);
+            roseDao.findFlowers().forEach(f -> bouquet.addFlower((GeneralFlower) f));
+            chamomileDao.findFlowers().forEach(f -> bouquet.addFlower((GeneralFlower) f));
+            tulipDao.findFlowers().forEach(f -> bouquet.addFlower((GeneralFlower) f));
+            bouquets.add(bouquet);
+        }
 //            int count = rs.getMetaData().getColumnCount();
 //            for (int i = 1; i<= count; i++) {
 //                System.out.println(rs.getMetaData().getColumnTypeName(i) + " " + rs.getMetaData().getColumnName(i));
 //            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
         return bouquets;
     }
 }

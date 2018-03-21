@@ -11,4 +11,9 @@ public class Tulip extends GeneralFlower {
         this.freshness = fresh;
     }
 
+    public Tulip(int id, int lenght, float price, FreshnessInteger fresh){
+        this(lenght, price, fresh);
+        this.id = id;
+    }
+
 }

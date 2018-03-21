@@ -7,12 +7,12 @@ import com.flowergarden.properties.FreshnessInteger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RoseDaoImpl extends GeneralFlowerDao {
 
     {
-        //TODO:length
         this.SAVE_FLOWER_QUERY = "INSERT INTO flower" + "(name, lenght, freshness, price, spike)" + "VALUES"
                                + "(?, ?, ?, ?, ?)";
         this.type = "rose";
@@ -23,9 +23,14 @@ public class RoseDaoImpl extends GeneralFlowerDao {
     }
 
     @Override
+    protected Flower createFlowerInstance(int id, int length, FreshnessInteger freshness, float price, int petals, boolean spike) {
+        return new Rose(id, spike, length, price, freshness);
+    }
+
+    @Override
     protected void populateInsertPrepareStatement(PreparedStatement preparedStatement, Flower flower)
         throws SQLException {
-        preparedStatement.setString(1, "rose");
+        preparedStatement.setString(1, type);
         preparedStatement.setInt(2, flower.getLenght());
         preparedStatement.setInt(3, ((FreshnessInteger) flower.getFreshness()).getFreshness());
         preparedStatement.setFloat(4, flower.getPrice());
