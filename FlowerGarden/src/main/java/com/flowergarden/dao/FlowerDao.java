@@ -1,6 +1,5 @@
 package com.flowergarden.dao;
 
-import com.flowergarden.bouquet.Bouquet;
 import com.flowergarden.flowers.Flower;
 
 import java.sql.SQLException;

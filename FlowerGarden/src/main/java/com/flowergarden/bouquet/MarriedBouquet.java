@@ -15,6 +15,7 @@ public class MarriedBouquet implements Bouquet<GeneralFlower> {
 
 	private float assemblePrice = 120;
 	private List<GeneralFlower> flowerList = new ArrayList<>();
+	private int id;
 
 	@Override
 	public float getPrice() {
@@ -53,5 +54,23 @@ public class MarriedBouquet implements Bouquet<GeneralFlower> {
 
 	public void setAssembledPrice(float price) {
 		assemblePrice = price;
+	}
+
+	@Override
+	public int getId() {
+		return 0;
+	}
+
+	public int setId(int id) {
+		return this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "MarriedBouquet{" +
+				"assemblePrice=" + assemblePrice +
+				", flowerList=" + flowerList +
+				", id=" + id +
+				'}';
 	}
 }

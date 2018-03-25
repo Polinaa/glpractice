@@ -16,16 +16,14 @@ public class ConnectionProviderImplSqlite implements ConnectionProvider {
 
     private static Connection connection;
 
-    public ConnectionProviderImplSqlite() {
+    public ConnectionProviderImplSqlite() throws SQLException {
         if (connection == null) {
             try {
                 url = "jdbc:sqlite:" + DB_LOCATION.getCanonicalFile().toURI();
-                connection = DriverManager.getConnection(url);
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
+            connection = DriverManager.getConnection(url);
         }
     }
 

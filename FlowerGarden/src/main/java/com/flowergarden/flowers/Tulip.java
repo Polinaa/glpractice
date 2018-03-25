@@ -16,4 +16,13 @@ public class Tulip extends GeneralFlower {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return "Tulip{" +
+                "id=" + id +
+                ", freshness=" + freshness +
+                ", price=" + price +
+                ", lenght=" + lenght +
+                '}';
+    }
 }

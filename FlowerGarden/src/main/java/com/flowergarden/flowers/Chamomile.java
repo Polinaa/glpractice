@@ -27,7 +27,15 @@ public class Chamomile extends GeneralFlower {
 	public int getPetals(){
 		return petals;
 	}
-	
 
-
+	@Override
+	public String toString() {
+		return "Chamomile{" +
+				"petals=" + petals +
+				", id=" + id +
+				", freshness=" + freshness +
+				", price=" + price +
+				", lenght=" + lenght +
+				'}';
+	}
 }

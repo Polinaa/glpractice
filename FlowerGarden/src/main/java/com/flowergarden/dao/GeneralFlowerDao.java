@@ -71,8 +71,6 @@ public abstract class GeneralFlowerDao implements FlowerDao {
         float price = rs.getFloat("price");
         int petals = rs.getInt("petals");
         boolean spike = rs.getBoolean("spike");
-//            String name = rs.getString("name");
-//            int bouquetId = rs.getInt("bouquet_id");
         FreshnessInteger freshnessInteger = new FreshnessInteger(freshness);
         return createFlowerInstance(id, length, freshnessInteger, price, petals, spike);
     }

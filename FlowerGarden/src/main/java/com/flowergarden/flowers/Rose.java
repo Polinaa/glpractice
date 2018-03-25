@@ -24,7 +24,15 @@ public class Rose extends GeneralFlower {
 	public boolean getSpike(){
 		return spike;
 	}
-	
 
-
+	@Override
+	public String toString() {
+		return "Rose{" +
+				"spike=" + spike +
+				", id=" + id +
+				", freshness=" + freshness +
+				", price=" + price +
+				", lenght=" + lenght +
+				'}';
+	}
 }
