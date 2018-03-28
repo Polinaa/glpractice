@@ -32,9 +32,9 @@ public class MarriedBouquetJsonDaoImpl implements MarriedBouquetJsonDao {
 
     @Override
     public Bouquet readBouquetById(int id) throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance(Bouquet.class);
+        JAXBContext jc = JAXBContext.newInstance(MarriedBouquet.class);
         Unmarshaller unmarshaller = jc.createUnmarshaller();
-        Bouquet bouquet = (Bouquet) unmarshaller.unmarshal(new File(FILE_PATH));
+        Bouquet bouquet = (MarriedBouquet) unmarshaller.unmarshal(new File(FILE_PATH));
         return bouquet;
     }
 }

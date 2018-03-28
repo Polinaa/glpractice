@@ -13,7 +13,6 @@ public class TulipDaoImpl extends GeneralFlowerDao {
 
     {
         this.SAVE_FLOWER_QUERY = "INSERT INTO flower" + "(name, lenght, freshness, price)" + "VALUES" + "(?, ?, ?, ?)";
-        this.type = "tulip";
     }
 
     public TulipDaoImpl(Connection connection) {
@@ -28,9 +27,14 @@ public class TulipDaoImpl extends GeneralFlowerDao {
     @Override
     protected void populateInsertPrepareStatement(PreparedStatement preparedStatement, Flower flower)
         throws SQLException {
-        preparedStatement.setString(1, type);
+        preparedStatement.setString(1, getType());
         preparedStatement.setInt(2, flower.getLenght());
         preparedStatement.setInt(3, ((FreshnessInteger) flower.getFreshness()).getFreshness());
         preparedStatement.setFloat(4, flower.getPrice());
+    }
+
+    @Override
+    protected String getType() {
+        return "tulip";
     }
 }

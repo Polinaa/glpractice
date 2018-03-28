@@ -11,15 +11,13 @@ public abstract class GeneralFlowerDao implements FlowerDao {
 
     private Connection connection;
 
-    protected String type;
+    private String DELETE_BY_ID_QUERY = "DELETE FROM flower WHERE id = ? AND name='" + getType() + "'";
 
-    private String DELETE_BY_ID_QUERY = "DELETE FROM flower WHERE id = ? AND name=" + type;
+    protected String SELECT_ALL_QUERY = "SELECT * FROM flower WHERE name='" + getType() + "'";
 
-    protected String SELECT_ALL_QUERY = "select * from flower where name=" + type;
+    protected String SELECT_BY_ID_QUERY = "SELECT * FROM flower WHERE name='" + getType() + "' AND id=?";
 
-    protected String SELECT_BY_ID_QUERY = "select * from flower where name=" + type + " AND id=?";
-
-    protected String SELECT_BY_BOUQUET_ID_QUERY = "select * from flower where name=" + type + " AND bouquet_id=?";
+    protected String SELECT_BY_BOUQUET_ID_QUERY = "SELECT * FROM flower WHERE name='" + getType() + "' AND bouquet_id=?";
 
     protected String SAVE_FLOWER_QUERY;
 
@@ -62,6 +60,8 @@ public abstract class GeneralFlowerDao implements FlowerDao {
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(SELECT_ALL_QUERY);
         while (rs.next()) {
+            System.out.println(rs.getInt("bouquet_id"));
+            System.out.println(rs.getString("name"));
             flowers.add(readResultSet(rs));
         }
         return flowers;
@@ -69,7 +69,6 @@ public abstract class GeneralFlowerDao implements FlowerDao {
 
     private Flower readResultSet(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
-        System.out.println(id);
         int length = rs.getInt("lenght");
         int freshness = rs.getInt("freshness");
         float price = rs.getFloat("price");
@@ -84,4 +83,6 @@ public abstract class GeneralFlowerDao implements FlowerDao {
 
     protected abstract void populateInsertPrepareStatement(PreparedStatement preparedStatement, Flower flower)
             throws SQLException;
+
+    protected abstract String getType();
 }

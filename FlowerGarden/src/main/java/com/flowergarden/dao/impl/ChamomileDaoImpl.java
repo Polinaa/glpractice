@@ -14,7 +14,6 @@ public class ChamomileDaoImpl extends GeneralFlowerDao {
     {
         this.SAVE_FLOWER_QUERY =
             "INSERT INTO flower" + "(name, lenght, freshness, price, petal)" + "VALUES" + "(?, ?, ?, ?, ?)";
-        this.type = "chamomile";
     }
 
     public ChamomileDaoImpl(Connection connection) {
@@ -29,10 +28,15 @@ public class ChamomileDaoImpl extends GeneralFlowerDao {
     @Override
     protected void populateInsertPrepareStatement(PreparedStatement preparedStatement, Flower flower)
         throws SQLException {
-        preparedStatement.setString(1, type);
+        preparedStatement.setString(1, getType());
         preparedStatement.setInt(2, flower.getLenght());
         preparedStatement.setInt(3, ((FreshnessInteger) flower.getFreshness()).getFreshness());
         preparedStatement.setFloat(4, flower.getPrice());
         preparedStatement.setBoolean(5, ((Chamomile) flower).getPetal());
+    }
+
+    @Override
+    protected String getType() {
+        return "chamomile";
     }
 }
