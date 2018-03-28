@@ -46,11 +46,15 @@ public abstract class GeneralFlowerDao implements FlowerDao {
         return readResultSet(resultSet);
     }
 
-    public Flower findFlowersInBouquet(int id) throws SQLException {
+    public List<Flower> findFlowersInBouquet(int id) throws SQLException {
+        List<Flower> flowers = new ArrayList<>();
         PreparedStatement st = connection.prepareStatement(SELECT_BY_BOUQUET_ID_QUERY);
         st.setInt(1, id);
-        ResultSet resultSet = st.executeQuery();
-        return readResultSet(resultSet);
+        ResultSet rs = st.executeQuery();
+        while (rs.next()) {
+            flowers.add(readResultSet(rs));
+        }
+        return flowers;
     }
 
     public List<Flower> findFlowers() throws SQLException {

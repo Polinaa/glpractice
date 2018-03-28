@@ -10,5 +10,5 @@ public interface FlowerDao {
     void deleteFlowerById(int id) throws SQLException;
     List<Flower> findFlowers() throws SQLException;
     Flower findFlowerById(int id) throws SQLException;
-    Flower findFlowersInBouquet(int id) throws SQLException;
+    List<Flower> findFlowersInBouquet(int id) throws SQLException;
 }

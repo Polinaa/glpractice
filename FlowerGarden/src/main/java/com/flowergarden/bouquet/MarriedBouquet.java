@@ -11,10 +11,22 @@ import com.flowergarden.flowers.Chamomile;
 import com.flowergarden.flowers.GeneralFlower;
 import com.flowergarden.flowers.Rose;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class MarriedBouquet implements Bouquet<GeneralFlower> {
 
+	@XmlElement
 	private float assemblePrice = 120;
+
+	@XmlElement
 	private List<GeneralFlower> flowerList = new ArrayList<>();
+
+	@XmlElement
 	private int id;
 
 	@Override

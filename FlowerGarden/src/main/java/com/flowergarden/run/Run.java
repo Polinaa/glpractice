@@ -13,13 +13,13 @@ public class Run {
 
 	public static void main(String[] args) throws IOException {
 
-		ConnectionProvider connectionProvider = new ConnectionProviderImplSqlite();
-		GeneralFlowerDao generalGeneralFlowerDao = new RoseDaoImpl(connectionProvider.getConnection());
+//		ConnectionProvider connectionProvider = new ConnectionProviderImplSqlite();
+//		GeneralFlowerDao generalGeneralFlowerDao = new RoseDaoImpl(connectionProvider.getConnection());
 //		generalGeneralFlowerDao.deleteFlowerById(6);
 //		generalGeneralFlowerDao.saveFlower(new Rose(true, 2, 2, new FreshnessInteger(2)));
 //		generalGeneralFlowerDao.findFlowers();
-		MarriedBouquetDaoImpl marriedBouquet = new MarriedBouquetDaoImpl(connectionProvider.getConnection());
-		marriedBouquet.findBouquets();
+//		MarriedBouquetDaoImpl marriedBouquet = new MarriedBouquetDaoImpl(connectionProvider.getConnection());
+//		marriedBouquet.findBouquets();
 
 		}
 

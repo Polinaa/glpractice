@@ -16,9 +16,11 @@ public class MarriedBouquetDaoImpl implements BouquetDao {
 
     private final static String SELECT_ALL_QUERY = "select * from bouquet";
 
+    private final static String SELECT_BY_ID_QUERY = "SELECT * FROM bouquet WHERE id =?";
+
     private final static String SAVE_BOUQUET_QUERY = "INSERT INTO bouquet" + "(name, assemble_price)" + "VALUES" + "(?, ?)";
 
-    private final static String BOUQUET_NAME = "married bouquet";
+    private final static String BOUQUET_NAME = "married";
 
     private static RoseDaoImpl roseDao;
     private static ChamomileDaoImpl chamomileDao;
@@ -58,6 +60,17 @@ public class MarriedBouquetDaoImpl implements BouquetDao {
     }
 
     @Override
+    public MarriedBouquet findBouquetById(int id) throws SQLException {
+        PreparedStatement st = connection.prepareStatement(SELECT_BY_ID_QUERY);
+        st.setInt(1, id);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+            return readResultSet(rs);
+        }
+        return null;
+    }
+
+    @Override
     public void deleteBouquetById(int id) throws SQLException {
         PreparedStatement st = connection.prepareStatement(DELETE_BY_ID);
         st.setInt(1, id);
@@ -70,16 +83,20 @@ public class MarriedBouquetDaoImpl implements BouquetDao {
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(SELECT_ALL_QUERY);
         while (rs.next()) {
-            int id = rs.getInt("id");
-            float assemblePrice = rs.getFloat("assemble_price");
-            MarriedBouquet bouquet = new MarriedBouquet();
-            bouquet.setAssembledPrice(assemblePrice);
-            bouquet.setId(id);
-            roseDao.findFlowers().forEach(f -> bouquet.addFlower((GeneralFlower) f));
-            chamomileDao.findFlowers().forEach(f -> bouquet.addFlower((GeneralFlower) f));
-            tulipDao.findFlowers().forEach(f -> bouquet.addFlower((GeneralFlower) f));
-            bouquets.add(bouquet);
+            bouquets.add(readResultSet(rs));
         }
         return bouquets;
+    }
+
+    private MarriedBouquet readResultSet(ResultSet rs) throws SQLException {
+        int id = rs.getInt("id");
+        float assemblePrice = rs.getFloat("assemble_price");
+        MarriedBouquet bouquet = new MarriedBouquet();
+        bouquet.setAssembledPrice(assemblePrice);
+        bouquet.setId(id);
+        roseDao.findFlowersInBouquet(id).forEach(f -> bouquet.addFlower((GeneralFlower) f));
+        chamomileDao.findFlowersInBouquet(id).forEach(f -> bouquet.addFlower((GeneralFlower) f));
+        tulipDao.findFlowersInBouquet(id).forEach(f -> bouquet.addFlower((GeneralFlower) f));
+        return bouquet;
     }
 }
