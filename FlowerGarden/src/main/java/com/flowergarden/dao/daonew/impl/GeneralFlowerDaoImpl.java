@@ -24,12 +24,12 @@ public class GeneralFlowerDaoImpl implements GeneralFlowerDao {
     private static final String SELECT_BY_BOUQUET_ID_QUERY = SELECT_ALL_QUERY + " WHERE bouquet_id=?";
 
     //TODO: combine
-    private static final String INSERT_QUERY_ROSE = "INSERT INTO flower" + "(name, lenght, freshness, price, spike)" + "VALUES"
-        + "(?, ?, ?, ?, ?)";
+    private static final String INSERT_QUERY = "INSERT INTO flower" + "(name, lenght, freshness, price, spike, petal)" + "VALUES"
+        + "(?, ?, ?, ?, ?, ?)";
 
-    private static final String INSERT_QUERY_TULIP = "INSERT INTO flower" + "(name, lenght, freshness, price)" + "VALUES" + "(?, ?, ?, ?)";
-
-    private static final String INSERT_QUERY_CHAMOMILE = "INSERT INTO flower" + "(name, lenght, freshness, price, petal)" + "VALUES" + "(?, ?, ?, ?, ?)";
+//    private static final String INSERT_QUERY_TULIP = "INSERT INTO flower" + "(name, lenght, freshness, price)" + "VALUES" + "(?, ?, ?, ?)";
+//
+//    private static final String INSERT_QUERY_CHAMOMILE = "INSERT INTO flower" + "(name, lenght, freshness, price, petal)" + "VALUES" + "(?, ?, ?, ?, ?)";
 
 
 //    private static final String SAVE_FLOWER_QUERY;
@@ -38,13 +38,17 @@ public class GeneralFlowerDaoImpl implements GeneralFlowerDao {
         this.connection = connection;
     }
 
-    public void saveFlower(Flower flower) throws SQLException {
-        PreparedStatement st = connection.prepareStatement(SAVE_FLOWER_QUERY);
-        populateInsertPrepareStatement(st, flower);
-        st.executeUpdate();
+    public Flower findFlowerById(int id) throws SQLException {
+        PreparedStatement st = connection.prepareStatement(SELECT_BY_ID_QUERY);
+        st.setInt(1, id);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+            return readResultSet(rs);
+        }
+        return null;
     }
 
-    public List<Flower> findFlowers() throws SQLException {
+    public List<Flower> findAllFlowers() throws SQLException {
         List<Flower> flowers = new ArrayList<>();
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(SELECT_ALL_QUERY);
@@ -52,19 +56,6 @@ public class GeneralFlowerDaoImpl implements GeneralFlowerDao {
             flowers.add(readResultSet(rs));
         }
         return flowers;
-    }
-
-    public Flower findFlowerById(int id) throws SQLException {
-        PreparedStatement st = connection.prepareStatement(SELECT_BY_ID_QUERY);
-        st.setInt(1, id);
-        ResultSet resultSet = st.executeQuery();
-        return readResultSet(resultSet);
-    }
-
-    public void deleteFlowerById(int id) throws SQLException {
-        PreparedStatement st = connection.prepareStatement(DELETE_BY_ID_QUERY);
-        st.setInt(1, id);
-        st.executeUpdate();
     }
 
     public List<Flower> findFlowersInBouquet(int id) throws SQLException {
@@ -76,6 +67,18 @@ public class GeneralFlowerDaoImpl implements GeneralFlowerDao {
             flowers.add(readResultSet(rs));
         }
         return flowers;
+    }
+
+    public void saveFlower(Flower flower) throws SQLException {
+        PreparedStatement st = connection.prepareStatement(INSERT_QUERY);
+        populateInsertPrepareStatement(st, flower);
+        st.executeUpdate();
+    }
+
+    public void deleteFlowerById(int id) throws SQLException {
+        PreparedStatement st = connection.prepareStatement(DELETE_BY_ID_QUERY);
+        st.setInt(1, id);
+        st.executeUpdate();
     }
 
     private Flower readResultSet(ResultSet rs) throws SQLException {
@@ -104,22 +107,28 @@ public class GeneralFlowerDaoImpl implements GeneralFlowerDao {
         }
     }
 
-    protected void populateInsertPrepareStatement(PreparedStatement preparedStatement, Flower flower) {
-
+    protected void populateInsertPrepareStatement(PreparedStatement preparedStatement, Flower flower)
+        throws SQLException {
+        preparedStatement.setString(1, flower.getClass().getName().toLowerCase());
+        preparedStatement.setInt(2, flower.getLenght());
+        preparedStatement.setInt(3, ((FreshnessInteger) flower.getFreshness()).getFreshness());
+        preparedStatement.setFloat(4, flower.getPrice());
+        preparedStatement.setBoolean(5, ((Rose) flower).getSpike());
+        preparedStatement.setBoolean(6, ((Chamomile) flower).getPetal());
     }
 
-    private String getInsertQuery(Flower flower) {
-        if (flower instanceof Rose) {
-            return INSERT_QUERY_ROSE;
-        }
-        if (flower instanceof Chamomile) {
-            return INSERT_QUERY_CHAMOMILE;
-        }
-        if (flower instanceof Tulip) {
-            return INSERT_QUERY_TULIP;
-        }
-        throw new IllegalArgumentException("Couldn't find an insert query for Class '" + flower.getClass().getCanonicalName());
-    }
+//    private String getInsertQuery(Flower flower) {
+//        if (flower instanceof Rose) {
+//            return INSERT_QUERY_ROSE;
+//        }
+//        if (flower instanceof Chamomile) {
+//            return INSERT_QUERY_CHAMOMILE;
+//        }
+//        if (flower instanceof Tulip) {
+//            return INSERT_QUERY_TULIP;
+//        }
+//        throw new IllegalArgumentException("Couldn't find an insert query for Class '" + flower.getClass().getCanonicalName());
+//    }
 
     private class FlowerConstants {
         private static final String ID_COLUMN = "id";

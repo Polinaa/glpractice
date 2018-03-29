@@ -1,6 +1,5 @@
 package com.flowergarden.run;
 
-import com.flowergarden.bouquet.MarriedBouquet;
 import com.flowergarden.dao.ConnectionProvider;
 import com.flowergarden.dao.GeneralFlowerDao;
 import com.flowergarden.dao.impl.MarriedBouquetDaoImpl;
@@ -8,18 +7,21 @@ import com.flowergarden.dao.impl.RoseDaoImpl;
 import com.flowergarden.dao.impl.ConnectionProviderImplSqlite;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class Run {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, SQLException {
 
-//		ConnectionProvider connectionProvider = new ConnectionProviderImplSqlite();
-//		GeneralFlowerDao generalGeneralFlowerDao = new RoseDaoImpl(connectionProvider.getConnection());
+		ConnectionProvider connectionProvider = new ConnectionProviderImplSqlite();
+		GeneralFlowerDao generalGeneralFlowerDao = new RoseDaoImpl(connectionProvider.getConnection());
+
+
 //		generalGeneralFlowerDao.deleteFlowerById(6);
-//		generalGeneralFlowerDao.saveFlower(new Rose(true, 2, 2, new FreshnessInteger(2)));
-//		generalGeneralFlowerDao.findFlowers();
+////		generalGeneralFlowerDao.saveFlower(new Rose(true, 2, 2, new FreshnessInteger(2)));
+//		generalGeneralFlowerDao.findAllFlowers();
 //		MarriedBouquetDaoImpl marriedBouquet = new MarriedBouquetDaoImpl(connectionProvider.getConnection());
-//		marriedBouquet.findBouquets();
+//		marriedBouquet.finddAllBouquets();
 
 		}
 

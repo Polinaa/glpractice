@@ -19,7 +19,7 @@ public class Runner {
 //        Bouquet bouquet = marriedBouquetDao.findBouquetById(1);
         RoseDaoImpl roseDao = new RoseDaoImpl(new ConnectionProviderImplSqlite().getConnection());
         roseDao.findFlowers().forEach(f -> System.out.println(f));
-//        marriedBouquetDao.findBouquets().forEach(b -> System.out.println(b));
+//        marriedBouquetDao.finddAllBouquets().forEach(b -> System.out.println(b));
 //        marriedBouquetJsonDao.saveBouquetToJson(bouquet);
     }
 }
