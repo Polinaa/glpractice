@@ -1,10 +1,7 @@
 package com.flowergarden.dao.daonew.impl;
 
 import com.flowergarden.dao.daonew.GeneralFlowerDao;
-import com.flowergarden.flowers.Chamomile;
-import com.flowergarden.flowers.Flower;
-import com.flowergarden.flowers.Rose;
-import com.flowergarden.flowers.Tulip;
+import com.flowergarden.flowers.*;
 import com.flowergarden.properties.FreshnessInteger;
 
 import java.sql.*;
@@ -24,8 +21,9 @@ public class GeneralFlowerDaoImpl implements GeneralFlowerDao {
     private static final String SELECT_BY_BOUQUET_ID_QUERY = SELECT_ALL_QUERY + " WHERE bouquet_id=?";
 
     //TODO: combine
-    private static final String INSERT_QUERY = "INSERT INTO flower" + "(name, lenght, freshness, price, spike, petal)" + "VALUES"
-        + "(?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_QUERY = "INSERT INTO flower " + "(name, lenght, freshness, price, spike, petal, bouquet_id)" + "VALUES"
+        + "(?, ?, ?, ?, ?, ?, ?)";
+
 
 //    private static final String INSERT_QUERY_TULIP = "INSERT INTO flower" + "(name, lenght, freshness, price)" + "VALUES" + "(?, ?, ?, ?)";
 //
@@ -54,6 +52,7 @@ public class GeneralFlowerDaoImpl implements GeneralFlowerDao {
         ResultSet rs = st.executeQuery(SELECT_ALL_QUERY);
         while (rs.next()) {
             flowers.add(readResultSet(rs));
+            System.out.println(rs.getInt("bouquet_id"));
         }
         return flowers;
     }
@@ -69,9 +68,9 @@ public class GeneralFlowerDaoImpl implements GeneralFlowerDao {
         return flowers;
     }
 
-    public void saveFlower(Flower flower) throws SQLException {
+    public void saveFlower(Flower flower, int bouquetId) throws SQLException {
         PreparedStatement st = connection.prepareStatement(INSERT_QUERY);
-        populateInsertPrepareStatement(st, flower);
+        populateInsertPrepareStatement(st, flower, bouquetId);
         st.executeUpdate();
     }
 
@@ -87,7 +86,7 @@ public class GeneralFlowerDaoImpl implements GeneralFlowerDao {
         int length = rs.getInt(FlowerConstants.LENGTH_COLUMN);
         int freshness = rs.getInt(FlowerConstants.FRESHNESS_COLUMN);
         float price = rs.getFloat(FlowerConstants.PRICE_COLUMN);
-        int petals = rs.getInt(FlowerConstants.PETALS_COLUMN);
+        int petals = rs.getInt(FlowerConstants.PETAL_COLUMN);
         boolean spike = rs.getBoolean(FlowerConstants.SPIKE_COLUMN);
         FreshnessInteger freshnessInteger = new FreshnessInteger(freshness);
         return createFlowerInstance(id, name, length, freshnessInteger, price, petals, spike);
@@ -107,14 +106,17 @@ public class GeneralFlowerDaoImpl implements GeneralFlowerDao {
         }
     }
 
-    protected void populateInsertPrepareStatement(PreparedStatement preparedStatement, Flower flower)
+    protected void populateInsertPrepareStatement(PreparedStatement preparedStatement, Flower flower, int bouquetId)
         throws SQLException {
-        preparedStatement.setString(1, flower.getClass().getName().toLowerCase());
+        preparedStatement.setString(1, flower.getClass().getSimpleName().toLowerCase());
         preparedStatement.setInt(2, flower.getLenght());
         preparedStatement.setInt(3, ((FreshnessInteger) flower.getFreshness()).getFreshness());
         preparedStatement.setFloat(4, flower.getPrice());
-        preparedStatement.setBoolean(5, ((Rose) flower).getSpike());
-        preparedStatement.setBoolean(6, ((Chamomile) flower).getPetal());
+        if (flower instanceof Rose)
+            preparedStatement.setBoolean(5, ((Rose) flower).getSpike());
+        if (flower instanceof Chamomile)
+            preparedStatement.setBoolean(6, ((Chamomile) flower).getPetal());
+        preparedStatement.setInt(7, bouquetId);
     }
 
 //    private String getInsertQuery(Flower flower) {
@@ -136,7 +138,7 @@ public class GeneralFlowerDaoImpl implements GeneralFlowerDao {
         private static final String LENGTH_COLUMN = "lenght";
         private static final String FRESHNESS_COLUMN = "freshness";
         private static final String PRICE_COLUMN = "price";
-        private static final String PETALS_COLUMN = "petals";
+        private static final String PETAL_COLUMN = "petal";
         private static final String SPIKE_COLUMN = "spike";
 
         private static final String ROSE_TYPE = "rose";

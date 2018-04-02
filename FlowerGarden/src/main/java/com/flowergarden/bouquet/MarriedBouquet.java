@@ -70,7 +70,7 @@ public class MarriedBouquet implements Bouquet<GeneralFlower> {
 
 	@Override
 	public int getId() {
-		return 0;
+		return id;
 	}
 
 	public int setId(int id) {

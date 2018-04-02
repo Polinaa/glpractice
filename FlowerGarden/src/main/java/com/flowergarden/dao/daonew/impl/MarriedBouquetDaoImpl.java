@@ -41,7 +41,7 @@ public class MarriedBouquetDaoImpl implements BouquetDao {
         List<Flower> flowers = new ArrayList(bouquet.getFlowers());
         flowers.stream().forEach(flower -> {
             try {
-                generalFlowerDao.saveFlower(flower);
+                generalFlowerDao.saveFlower(flower, bouquet.getId());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
