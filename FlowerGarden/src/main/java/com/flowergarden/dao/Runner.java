@@ -1,10 +1,9 @@
 package com.flowergarden.dao;
 
-import com.flowergarden.dao.daonew.InitDB;
-import com.flowergarden.dao.daonew.impl.GeneralFlowerDaoImpl;
-import com.flowergarden.dao.daonew.impl.InitDBImplSqlite;
-import com.flowergarden.dao.daonew.impl.ConnectionProviderImplSqlite;
-import com.flowergarden.dao.daonew.impl.MarriedBouquetDaoImpl;
+import com.flowergarden.dao.impl.GeneralFlowerDaoImpl;
+import com.flowergarden.dao.impl.InitDBImplSqlite;
+import com.flowergarden.dao.impl.ConnectionProviderImplSqlite;
+import com.flowergarden.dao.impl.MarriedBouquetDaoImpl;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -26,9 +25,9 @@ public class Runner {
         ConnectionProviderImplSqlite connectionProviderImplSqlite = new ConnectionProviderImplSqlite();
         MarriedBouquetDaoImpl bouquetDao = new MarriedBouquetDaoImpl(connectionProviderImplSqlite.getConnection());
         InitDB initDB = new InitDBImplSqlite(connectionProviderImplSqlite.getConnection(), bouquetDao);
-        initDB.deleteTable();
-        initDB.createTable();
-        initDB.populateTable();
+        initDB.deleteTables();
+        initDB.createTables();
+        initDB.populateTables();
         bouquetDao.findAllBouquets().forEach(b -> System.out.println(b));
 
         GeneralFlowerDaoImpl generalFlowerDao = new GeneralFlowerDaoImpl(connectionProviderImplSqlite.getConnection());

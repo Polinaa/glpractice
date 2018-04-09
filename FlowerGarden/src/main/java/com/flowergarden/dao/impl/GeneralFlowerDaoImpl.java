@@ -1,6 +1,7 @@
-package com.flowergarden.dao.daonew.impl;
+package com.flowergarden.dao.impl;
 
-import com.flowergarden.dao.daonew.GeneralFlowerDao;
+import com.flowergarden.dao.ConnectionProvider;
+import com.flowergarden.dao.GeneralFlowerDao;
 import com.flowergarden.flowers.*;
 import com.flowergarden.properties.FreshnessInteger;
 
@@ -8,9 +9,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: close connections
 public class GeneralFlowerDaoImpl implements GeneralFlowerDao {
-    private Connection connection;
+    private ConnectionProvider connectionProvider;
 
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM flower WHERE id = ?";
 
@@ -20,7 +20,6 @@ public class GeneralFlowerDaoImpl implements GeneralFlowerDao {
 
     private static final String SELECT_BY_BOUQUET_ID_QUERY = SELECT_ALL_QUERY + " WHERE bouquet_id=?";
 
-    //TODO: combine
     private static final String INSERT_QUERY = "INSERT INTO flower " + "(name, lenght, freshness, price, spike, petal, bouquet_id)" + "VALUES"
         + "(?, ?, ?, ?, ?, ?, ?)";
 
@@ -32,52 +31,59 @@ public class GeneralFlowerDaoImpl implements GeneralFlowerDao {
 
 //    private static final String SAVE_FLOWER_QUERY;
 
-    public GeneralFlowerDaoImpl(Connection connection) {
-        this.connection = connection;
-    }
-
     public Flower findFlowerById(int id) throws SQLException {
-        PreparedStatement st = connection.prepareStatement(SELECT_BY_ID_QUERY);
-        st.setInt(1, id);
-        ResultSet rs = st.executeQuery();
-        if (rs.next()) {
-            return readResultSet(rs);
+        try (Connection connection = connectionProvider.getConnection()){
+            PreparedStatement st = connection.prepareStatement(SELECT_BY_ID_QUERY);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                return readResultSet(rs);
+            }
         }
         return null;
     }
 
     public List<Flower> findAllFlowers() throws SQLException {
         List<Flower> flowers = new ArrayList<>();
-        Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery(SELECT_ALL_QUERY);
-        while (rs.next()) {
-            flowers.add(readResultSet(rs));
-            System.out.println(rs.getInt("bouquet_id"));
+        try (Connection connection = connectionProvider.getConnection()) {
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(SELECT_ALL_QUERY);
+            while (rs.next()) {
+                flowers.add(readResultSet(rs));
+                System.out.println(rs.getInt("bouquet_id"));
+            }
         }
         return flowers;
     }
 
     public List<Flower> findFlowersInBouquet(int id) throws SQLException {
         List<Flower> flowers = new ArrayList<>();
-        PreparedStatement st = connection.prepareStatement(SELECT_BY_BOUQUET_ID_QUERY);
-        st.setInt(1, id);
-        ResultSet rs = st.executeQuery();
-        while (rs.next()) {
-            flowers.add(readResultSet(rs));
+        try (Connection connection = connectionProvider.getConnection()) {
+            PreparedStatement st = connection.prepareStatement(SELECT_BY_BOUQUET_ID_QUERY);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                flowers.add(readResultSet(rs));
+            }
         }
         return flowers;
     }
 
     public void saveFlower(Flower flower, int bouquetId) throws SQLException {
-        PreparedStatement st = connection.prepareStatement(INSERT_QUERY);
-        populateInsertPrepareStatement(st, flower, bouquetId);
-        st.executeUpdate();
+        try (Connection connection = connectionProvider.getConnection()) {
+            PreparedStatement st = connection.prepareStatement(INSERT_QUERY);
+            populateInsertPrepareStatement(st, flower, bouquetId);
+            st.executeUpdate();
+        }
     }
 
     public void deleteFlowerById(int id) throws SQLException {
-        PreparedStatement st = connection.prepareStatement(DELETE_BY_ID_QUERY);
-        st.setInt(1, id);
-        st.executeUpdate();
+        try (Connection connection = connectionProvider.getConnection()) {
+            PreparedStatement st = connection.prepareStatement(DELETE_BY_ID_QUERY);
+            st.setInt(1, id);
+            st.executeUpdate();
+        }
     }
 
     private Flower readResultSet(ResultSet rs) throws SQLException {

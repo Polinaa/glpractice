@@ -1,8 +1,8 @@
-package com.flowergarden.dao.daonew.impl;
+package com.flowergarden.dao.impl;
 
 import com.flowergarden.bouquet.MarriedBouquet;
-import com.flowergarden.dao.daonew.BouquetDao;
-import com.flowergarden.dao.daonew.InitDB;
+import com.flowergarden.dao.BouquetDao;
+import com.flowergarden.dao.InitDB;
 import com.flowergarden.flowers.Chamomile;
 import com.flowergarden.flowers.Rose;
 import com.flowergarden.flowers.Tulip;
@@ -20,7 +20,7 @@ public class InitDBImplSqlite implements InitDB {
             "id INTEGER PRIMARY KEY, " +
             "assemble_price REAL NULL, " +
             "name TEXT NULL); ";
-private static final String CREATE_TABLES_QUERY2 = "CREATE TABLE IF NOT EXISTS flower ( " +
+    private static final String CREATE_TABLES_QUERY2 = "CREATE TABLE IF NOT EXISTS flower ( " +
             "id INTEGER PRIMARY KEY, " +
             "name TEXT NULL, " +
             "lenght INTEGER NULL, " +
@@ -29,29 +29,6 @@ private static final String CREATE_TABLES_QUERY2 = "CREATE TABLE IF NOT EXISTS f
             "petal INTEGER NULL, " +
             "spike INTEGER NULL, " +
             "bouquet_id INTEGER NULL);";
-
-//    AUTOINCREMENT
-//    private static final String CREATE_TABLES_QUERY = "CREATE TABLE IF NOT EXISTS `mydb`.`bouquet` (\n" +
-//            "  `id` INT NOT NULL,\n" +
-//            "  `assemble_price` FLOAT NULL,\n" +
-//            "  `name` VARCHAR(45) NULL,\n" +
-//            "  PRIMARY KEY (`id`)); " +
-//            "CREATE TABLE IF NOT EXISTS `mydb`.`flower` (\n" +
-//            "  `id` INT NOT NULL,\n" +
-//            "  `name` VARCHAR(45) NULL,\n" +
-//            "  `lenght` INT NULL,\n" +
-//            "  `freshness` INT NULL,\n" +
-//            "  `price` FLOAT NULL,\n" +
-//            "  `petals` TINYINT(1) NULL,\n" +
-//            "  `spike` TINYINT(1) NULL,\n" +
-//            "  `bouquet_id` INT NULL,\n" +
-//            "  PRIMARY KEY (`id`),\n" +
-//            "  INDEX `bouquet_id_idx` (`bouquet_id` ASC),\n" +
-//            "  CONSTRAINT `bouquet_id`\n" +
-//            "    FOREIGN KEY (`bouquet_id`)\n" +
-//            "    REFERENCES `mydb`.`bouquet` (`id`)\n" +
-//            "    ON DELETE NO ACTION\n" +
-//            "    ON UPDATE NO ACTION)";
 
     private static final String DELETE_TABLES_QUERY = "DROP TABLE IF EXISTS flower ;";
     private static final String DELETE_TABLES_QUERY2 = "DROP TABLE IF EXISTS bouquet ;";
@@ -66,7 +43,7 @@ private static final String CREATE_TABLES_QUERY2 = "CREATE TABLE IF NOT EXISTS f
     }
 
     @Override
-    public void createTable() throws SQLException {
+    public void createTables() throws SQLException {
         Statement st = connection.createStatement();
         st.executeUpdate(CREATE_TABLES_QUERY);
         st.executeUpdate(CREATE_TABLES_QUERY2);
@@ -74,14 +51,14 @@ private static final String CREATE_TABLES_QUERY2 = "CREATE TABLE IF NOT EXISTS f
     }
 
     @Override
-    public void deleteTable() throws SQLException {
+    public void deleteTables() throws SQLException {
         Statement st = connection.createStatement();
         st.executeUpdate(DELETE_TABLES_QUERY);
         st.executeUpdate(DELETE_TABLES_QUERY2);
     }
 
     @Override
-    public void populateTable() throws UnexpectedException, SQLException {
+    public void populateTables() throws UnexpectedException, SQLException {
         MarriedBouquet bouquet = new MarriedBouquet();
         bouquet.setAssembledPrice(12);
         bouquet.setId(1);
