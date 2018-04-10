@@ -15,14 +15,24 @@ public class Rose extends GeneralFlower {
 		this.price = price;
 		this.freshness = fresh;
 	}
-	public Rose(){
-		
+
+	public Rose(int id, boolean spike, int lenght, float price, FreshnessInteger fresh){
+		this(spike, lenght, price, fresh);
+		this.id = id;
 	}
 	
 	public boolean getSpike(){
 		return spike;
 	}
-	
 
-
+	@Override
+	public String toString() {
+		return "Rose{" +
+				"spike=" + spike +
+				", id=" + id +
+				", freshness=" + freshness +
+				", price=" + price +
+				", lenght=" + lenght +
+				'}';
+	}
 }

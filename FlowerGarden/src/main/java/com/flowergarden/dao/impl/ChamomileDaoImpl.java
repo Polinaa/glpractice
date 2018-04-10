@@ -12,7 +12,6 @@ import java.sql.SQLException;
 public class ChamomileDaoImpl extends GeneralFlowerDao {
 
     {
-        //TODO:length
         this.SAVE_FLOWER_QUERY =
             "INSERT INTO flower" + "(name, lenght, freshness, price, petal)" + "VALUES" + "(?, ?, ?, ?, ?)";
         this.type = "chamomile";
@@ -20,6 +19,11 @@ public class ChamomileDaoImpl extends GeneralFlowerDao {
 
     public ChamomileDaoImpl(Connection connection) {
         super(connection);
+    }
+
+    @Override
+    protected Flower createFlowerInstance(int id, int length, FreshnessInteger freshness, float price, int petals, boolean spike) {
+        return new Chamomile(id, petals, length, price, freshness);
     }
 
     @Override

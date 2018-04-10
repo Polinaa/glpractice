@@ -5,7 +5,9 @@ import javax.xml.bind.annotation.XmlElement;
 import com.flowergarden.properties.FreshnessInteger;
 
 public class GeneralFlower implements Flower<Integer>, Comparable<GeneralFlower> {
-	
+
+	int id;
+
 	FreshnessInteger freshness;
 	
 	@XmlElement
@@ -21,6 +23,15 @@ public class GeneralFlower implements Flower<Integer>, Comparable<GeneralFlower>
 	@Override
 	public FreshnessInteger getFreshness() {
 		return freshness;
+	}
+
+	@Override
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	@Override

@@ -1,9 +1,6 @@
 package com.flowergarden.dao;
 
-import com.flowergarden.flowers.Chamomile;
 import com.flowergarden.flowers.Flower;
-import com.flowergarden.flowers.Rose;
-import com.flowergarden.flowers.Tulip;
 import com.flowergarden.properties.FreshnessInteger;
 
 import java.sql.*;
@@ -12,84 +9,75 @@ import java.util.List;
 
 public abstract class GeneralFlowerDao implements FlowerDao {
 
+    private Connection connection;
+
     protected String type;
 
-    private final static String DELETE_BY_ID = "DELETE FROM flower WHERE id = ?";
+    private String DELETE_BY_ID_QUERY = "DELETE FROM flower WHERE id = ? AND name=" + type;
 
     protected String SELECT_ALL_QUERY = "select * from flower where name=" + type;
 
-    private Connection connection;
+    protected String SELECT_BY_ID_QUERY = "select * from flower where name=" + type + " AND id=?";
 
-    //    //TODO:length
-    protected static String SAVE_FLOWER_QUERY;
-//    = "INSERT INTO flower" + "(name, lenght, freshness, price, petals, spike)" + "VALUES"
-//                                       + "(?, ?, ?, ?, ?, ?)";
+    protected String SELECT_BY_BOUQUET_ID_QUERY = "select * from flower where name=" + type + " AND bouquet_id=?";
 
+    protected String SAVE_FLOWER_QUERY;
 
     public GeneralFlowerDao(Connection connection) {
         this.connection = connection;
     }
 
-    public void saveFlower(Flower flower) {
-        try {
-            PreparedStatement st = connection.prepareStatement(SAVE_FLOWER_QUERY);
-            populateInsertPrepareStatement(st, flower);
-            st.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void saveFlower(Flower flower) throws SQLException {
+        PreparedStatement st = connection.prepareStatement(SAVE_FLOWER_QUERY);
+        populateInsertPrepareStatement(st, flower);
+        st.executeUpdate();
     }
 
-    public void deleteFlowerById(int id) {
-        try {
-            PreparedStatement st = connection.prepareStatement(DELETE_BY_ID);
-            st.setInt(1, id);
-            st.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void deleteFlowerById(int id) throws SQLException {
+        PreparedStatement st = connection.prepareStatement(DELETE_BY_ID_QUERY);
+        st.setInt(1, id);
+        st.executeUpdate();
     }
 
-    public List<Flower> findFlowers() {
+    public Flower findFlowerById(int id) throws SQLException {
+        PreparedStatement st = connection.prepareStatement(SELECT_BY_ID_QUERY);
+        st.setInt(1, id);
+        ResultSet resultSet = st.executeQuery();
+        return readResultSet(resultSet);
+    }
+
+    public Flower findFlowersInBouquet(int id) throws SQLException {
+        PreparedStatement st = connection.prepareStatement(SELECT_BY_BOUQUET_ID_QUERY);
+        st.setInt(1, id);
+        ResultSet resultSet = st.executeQuery();
+        return readResultSet(resultSet);
+    }
+
+    public List<Flower> findFlowers() throws SQLException {
         List<Flower> flowers = new ArrayList<>();
-        try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(SELECT_ALL_QUERY);
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                System.out.println(id);
-                String name = rs.getString("name");
-                //TODO: change length
-                int length = rs.getInt("lenght");
-                int freshness = rs.getInt("freshness");
-                float price = rs.getFloat("price");
-                int petals = rs.getInt("petals");
-                boolean spike = rs.getBoolean("spike");
-//                int bouquetId = rs.getInt("bouquet_id");
-                Flower flower = createFlowerInstance(name, length, freshness, price, petals, spike);
-                flowers.add(flower);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(SELECT_ALL_QUERY);
+        while (rs.next()) {
+            flowers.add(readResultSet(rs));
         }
         return flowers;
     }
 
-    private Flower createFlowerInstance(String type, int length, int freshness, float price, int petals,
-                                                                 boolean spike) {
+    private Flower readResultSet(ResultSet rs) throws SQLException {
+        int id = rs.getInt("id");
+        System.out.println(id);
+        int length = rs.getInt("lenght");
+        int freshness = rs.getInt("freshness");
+        float price = rs.getFloat("price");
+        int petals = rs.getInt("petals");
+        boolean spike = rs.getBoolean("spike");
         FreshnessInteger freshnessInteger = new FreshnessInteger(freshness);
-        switch (type) {
-            case "rose":
-                return new Rose(spike, length, price, freshnessInteger);
-            case "chamomile":
-                return new Chamomile(petals, length, price, freshnessInteger);
-            case "tulip":
-                return new Tulip(length, price, freshnessInteger);
-            default:
-                throw new IllegalArgumentException("Couldn't find a flower type '" + type + "'.");
-        }
+        return createFlowerInstance(id, length, freshnessInteger, price, petals, spike);
     }
 
+    protected abstract Flower createFlowerInstance(int id, int length, FreshnessInteger freshness, float price, int petals,
+                                                   boolean spike);
+
     protected abstract void populateInsertPrepareStatement(PreparedStatement preparedStatement, Flower flower)
-        throws SQLException;
+            throws SQLException;
 }
