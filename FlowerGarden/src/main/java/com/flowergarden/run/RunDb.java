@@ -18,17 +18,17 @@ import com.flowergarden.exception.FlowerNotFoundException;
 
 public class RunDb {
 	public static void main(String[] args) throws SQLException, IOException, BouquetException, FlowerNotFoundException, FlowerException  {
-		int bouquetId = 1;
-		RunDb runDb = new RunDb();
-		
-		File file = new File("flowergarden.db");
-		String url = "jdbc:sqlite:"+file.getCanonicalFile().toURI();
-		System.out.println(url);
-		Connection conn = DriverManager.getConnection(url);
-		
-		MarriedBouquet marriedBouquet = runDb.getMarriedBouquet(bouquetId, conn);
-		
-		System.out.println(marriedBouquet.getPrice());
+//		int bouquetId = 1;
+//		RunDb runDb = new RunDb();
+//
+//		File file = new File("flowergarden.db");
+//		String url = "jdbc:sqlite:"+file.getCanonicalFile().toURI();
+//		System.out.println(url);
+//		Connection conn = DriverManager.getConnection(url);
+//
+//		MarriedBouquet marriedBouquet = runDb.getMarriedBouquet(bouquetId, conn);
+//
+//		System.out.println(marriedBouquet.getPrice());
 		
 //		PreparedStatement pstmt = conn.prepareStatement("select * from bouquet where name = ?");		
 //		String marriedBouquetName = "married";
@@ -52,15 +52,15 @@ public class RunDb {
 //		CallableStatement prep = conn.prepareCall("sql");
 //		prep.execute();
 		
-		conn.close();
+//		conn.close();
 		
 		
 	}
-
-	MarriedBouquet getMarriedBouquet(int bouquetId, Connection conn) throws BouquetException, FlowerNotFoundException, FlowerException {
-		BouquetDAO bouquetDAO = new BouquetDAO(conn);
-		MarriedBouquet marriedBouquet = bouquetDAO.getMarriedBouquet(bouquetId);
-		return marriedBouquet;
-	}
+//
+//	MarriedBouquet getMarriedBouquet(int bouquetId, Connection conn) throws BouquetException, FlowerNotFoundException, FlowerException {
+//		BouquetDAO bouquetDAO = new BouquetDAO(conn);
+//		MarriedBouquet marriedBouquet = bouquetDAO.getMarriedBouquet(bouquetId);
+//		return marriedBouquet;
+//	}
 
 }
