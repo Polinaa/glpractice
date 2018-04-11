@@ -51,7 +51,7 @@ public class FlowerDAO {
 							new FreshnessInteger(rs.getInt("freshness")));
 					break;
 				case "tulip":
-					flower = new Tulip();
+//					flower = new Tulip();
 					break;
 				default:
 					throw new FlowerNotFoundException("Unknown flower " + flowerName+ " from DB");

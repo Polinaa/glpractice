@@ -10,25 +10,16 @@ import java.sql.SQLException;
 
 public class ConnectionProviderImplSqlite implements ConnectionProvider {
 
-    private static final File DB_LOCATION = new File("flowergarden.db");
-
-    private static String url;
-
-    private static Connection connection;
-
-    public ConnectionProviderImplSqlite() throws SQLException {
-        if (connection == null) {
-            try {
-                url = "jdbc:sqlite:" + DB_LOCATION.getCanonicalFile().toURI();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            connection = DriverManager.getConnection(url);
-        }
-    }
+    private static final File DB_LOCATION = new File("flowertest.db");
 
     @Override
-    public Connection getConnection() {
-        return connection;
+    public Connection getConnection() throws SQLException{
+        String url = null;
+        try {
+            url = "jdbc:sqlite:" + DB_LOCATION.getCanonicalFile().toURI();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return DriverManager.getConnection(url);
     }
 }
