@@ -6,43 +6,40 @@ import com.flowergarden.dao.BouquetDao;
 import com.flowergarden.dao.ConnectionProvider;
 import com.flowergarden.dao.GeneralFlowerDao;
 import com.flowergarden.flowers.*;
+import com.flowergarden.util.SqliteQuery;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class MarriedBouquetDaoImpl implements BouquetDao {
-
-    private final static String DELETE_BY_ID = "DELETE FROM bouquet WHERE id = ?";
-
-    private final static String SELECT_ALL_QUERY = "SELECT * FROM bouquet";
-
-    private final static String SELECT_BY_ID_QUERY = SELECT_ALL_QUERY + " WHERE id =?";
-
-    private final static String SAVE_BOUQUET_QUERY = "INSERT INTO bouquet" + "(name, assemble_price)" + " VALUES" + "(?, ?)";
 
     private final static String BOUQUET_NAME = "married";
 
+    private final static String ID = "id";
+
+    private final static String ASSEMBLE_PRICE = "assemble_price";
+
+    @Autowired
     private GeneralFlowerDao generalFlowerDao;
 
+    @Autowired
     private ConnectionProvider connectionProvider;
+
+    @Autowired
+    private SqliteQuery sqliteQuery;
 
     @Override
     public void saveBouquet(Bouquet bouquet) throws SQLException {
         try (Connection connection = connectionProvider.getConnection()) {
             connection.setAutoCommit(false);
-            PreparedStatement st = connection.prepareStatement(SAVE_BOUQUET_QUERY);
+            PreparedStatement st = connection.prepareStatement(sqliteQuery.get("insert.bouquet"));
             st.setString(1, BOUQUET_NAME);
             st.setFloat(2, bouquet.getPrice());
             st.executeUpdate();
-            List<Flower> flowers = new ArrayList(bouquet.getFlowers());
-            flowers.stream().forEach(flower -> {
-                try {
-                    generalFlowerDao.saveFlower(flower, bouquet.getId());
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
             connection.commit();
             connection.setAutoCommit(true);
         }
@@ -51,8 +48,7 @@ public class MarriedBouquetDaoImpl implements BouquetDao {
     @Override
     public MarriedBouquet findBouquetById(int id) throws SQLException {
         try (Connection connection = connectionProvider.getConnection()) {
-
-            PreparedStatement st = connection.prepareStatement(SELECT_BY_ID_QUERY);
+            PreparedStatement st = connection.prepareStatement(sqliteQuery.get("select.bouquet.by.id"));
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
@@ -63,22 +59,11 @@ public class MarriedBouquetDaoImpl implements BouquetDao {
     }
 
     @Override
-    public void deleteBouquetById(int id) throws SQLException {
-        try (Connection connection = connectionProvider.getConnection()) {
-
-            PreparedStatement st = connection.prepareStatement(DELETE_BY_ID);
-            st.setInt(1, id);
-            st.executeUpdate();
-        }
-    }
-
-    @Override
     public List<Bouquet> findAllBouquets() throws SQLException {
         List<Bouquet> bouquets = new ArrayList<>();
         try (Connection connection = connectionProvider.getConnection()) {
-
             Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(SELECT_ALL_QUERY);
+            ResultSet rs = st.executeQuery(sqliteQuery.get("select.bouquets"));
             while (rs.next()) {
                 bouquets.add(readResultSet(rs));
             }
@@ -87,8 +72,8 @@ public class MarriedBouquetDaoImpl implements BouquetDao {
     }
 
     private MarriedBouquet readResultSet(ResultSet rs) throws SQLException {
-        int id = rs.getInt("id");
-        float assemblePrice = rs.getFloat("assemble_price");
+        int id = rs.getInt(ID);
+        float assemblePrice = rs.getFloat(ASSEMBLE_PRICE);
         MarriedBouquet bouquet = new MarriedBouquet();
         bouquet.setAssembledPrice(assemblePrice);
         bouquet.setId(id);

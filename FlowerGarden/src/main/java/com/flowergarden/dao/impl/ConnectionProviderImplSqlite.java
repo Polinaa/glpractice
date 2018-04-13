@@ -1,6 +1,7 @@
 package com.flowergarden.dao.impl;
 
 import com.flowergarden.dao.ConnectionProvider;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+@Component
 public class ConnectionProviderImplSqlite implements ConnectionProvider {
 
     private static final File DB_LOCATION = new File("flowertest.db");

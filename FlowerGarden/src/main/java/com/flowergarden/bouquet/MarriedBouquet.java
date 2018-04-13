@@ -73,6 +73,11 @@ public class MarriedBouquet implements Bouquet<GeneralFlower> {
 		return id;
 	}
 
+	@Override
+	public float getAssemblePrice() {
+		return assemblePrice;
+	}
+
 	public int setId(int id) {
 		return this.id = id;
 	}

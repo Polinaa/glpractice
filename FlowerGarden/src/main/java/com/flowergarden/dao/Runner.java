@@ -1,9 +1,7 @@
 package com.flowergarden.dao;
 
-import com.flowergarden.dao.impl.GeneralFlowerDaoImpl;
-import com.flowergarden.dao.impl.InitDBImplSqlite;
-import com.flowergarden.dao.impl.ConnectionProviderImplSqlite;
-import com.flowergarden.dao.impl.MarriedBouquetDaoImpl;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -21,16 +19,18 @@ public class Runner {
 //        marriedBouquetDao.finddAllBouquets().forEach(b -> System.out.println(b));
 //        marriedBouquetJsonDao.saveBouquetToJson(bouquet);
 
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("app-context-myflowergarden.xml");
+        InitDB initDB =  (InitDB) ctx.getBean("initDBImplSqlite");
+        BouquetDao bouquetDao =  (BouquetDao) ctx.getBean("marriedBouquetDaoImpl");
 
-        ConnectionProviderImplSqlite connectionProviderImplSqlite = new ConnectionProviderImplSqlite();
-        MarriedBouquetDaoImpl bouquetDao = new MarriedBouquetDaoImpl(connectionProviderImplSqlite.getConnection());
-        InitDB initDB = new InitDBImplSqlite(connectionProviderImplSqlite.getConnection(), bouquetDao);
+        GeneralFlowerDao generalFlowerDao =  (GeneralFlowerDao) ctx.getBean("generalFlowerDaoImpl");
+
         initDB.deleteTables();
         initDB.createTables();
         initDB.populateTables();
+
         bouquetDao.findAllBouquets().forEach(b -> System.out.println(b));
 
-        GeneralFlowerDaoImpl generalFlowerDao = new GeneralFlowerDaoImpl(connectionProviderImplSqlite.getConnection());
         generalFlowerDao.findAllFlowers().forEach(f-> System.out.println(f));
         generalFlowerDao.findFlowersInBouquet(1).forEach(f-> System.out.println(f));
     }
