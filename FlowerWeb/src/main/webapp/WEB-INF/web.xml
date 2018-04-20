@@ -2,12 +2,21 @@
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
  	<servlet>
-    		<servlet-name>hello</servlet-name>
-    		<servlet-class>com.flowergarden.servlets.HelloWorldServlet</servlet-class>
+    		<servlet-name>bouquet</servlet-name>
+    		<servlet-class>com.flowergarden.servlets.BouquetsServlet</servlet-class>
   	</servlet>
   
   	<servlet-mapping>
-   		<servlet-name>hello</servlet-name>
-    		<url-pattern>/hello</url-pattern>
-  	</servlet-mapping>
+   		<servlet-name>bouquet</servlet-name>
+		<url-pattern>/bouquets</url-pattern>
+	</servlet-mapping>
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/app-context.xml</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 </web-app>

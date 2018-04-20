@@ -12,7 +12,7 @@ import java.sql.SQLException;
 @Component
 public class ConnectionProviderImplSqlite implements ConnectionProvider {
 
-    private static final File DB_LOCATION = new File("flowertest.db");
+    private static final File DB_LOCATION = new File(".." + File.separator + "FlowerGarden" + File.separator + "flowertest.db");
 
     @Override
     public Connection getConnection() throws SQLException{

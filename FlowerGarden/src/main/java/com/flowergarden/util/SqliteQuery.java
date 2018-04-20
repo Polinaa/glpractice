@@ -2,6 +2,7 @@ package com.flowergarden.util;
 
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
@@ -13,7 +14,7 @@ public class SqliteQuery {
     public SqliteQuery() {
         properties = new Properties();
         try {
-            properties.load(new FileReader("sqlitequeries.properties"));
+            properties.load(new FileReader(".." + File.separator + "FlowerGarden" + File.separator + "sqlitequeries.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }

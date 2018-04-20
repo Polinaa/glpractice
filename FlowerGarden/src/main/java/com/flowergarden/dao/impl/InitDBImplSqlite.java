@@ -21,24 +21,27 @@ public class InitDBImplSqlite implements InitDB {
 
     @Override
     public void createTables() throws SQLException {
-        Connection connection = connectionProvider.getConnection();
-        Statement st = connection.createStatement();
-        st.executeUpdate(sqliteQuery.get("create.table.bouquet"));
-        st.executeUpdate(sqliteQuery.get("create.table.flower"));
+        try (Connection connection = connectionProvider.getConnection()) {
+            Statement st = connection.createStatement();
+            st.executeUpdate(sqliteQuery.get("create.table.bouquet"));
+            st.executeUpdate(sqliteQuery.get("create.table.flower"));
+        }
     }
 
     @Override
     public void deleteTables() throws SQLException {
-        Connection connection = connectionProvider.getConnection();
-        Statement st = connection.createStatement();
-        st.executeUpdate(sqliteQuery.get("drop.table.bouquet"));
-        st.executeUpdate(sqliteQuery.get("drop.table.flower"));
+        try (Connection connection = connectionProvider.getConnection()) {
+            Statement st = connection.createStatement();
+            st.executeUpdate(sqliteQuery.get("drop.table.bouquet"));
+            st.executeUpdate(sqliteQuery.get("drop.table.flower"));
+        }
     }
 
     @Override
     public void populateTables() throws SQLException {
-        Connection connection = connectionProvider.getConnection();
-        Statement st = connection.createStatement();
-        st.executeUpdate(sqliteQuery.get("test.data.population"));
+        try (Connection connection = connectionProvider.getConnection()) {
+            Statement st = connection.createStatement();
+            st.executeUpdate(sqliteQuery.get("test.data.population"));
+        }
     }
 }
