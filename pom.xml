@@ -12,6 +12,7 @@
     <modules>
         <module>flowerweb</module>
         <module>flowergarden</module>
+        <module>RESTfulExample</module>
     </modules>
 
     <dependencies>
