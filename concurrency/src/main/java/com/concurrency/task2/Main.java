@@ -1,6 +1,6 @@
-package com.concurrency.arraytask.com.concurrency;
+package com.concurrency.task2;
 
-import com.concurrency.arraytask.com.concurrency.cases.*;
+import com.concurrency.task2.cases.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,6 @@ public class Main {
         System.out.println("========================TASK=========================");
         System.out.println("There is next method that has to calculate long between 0 .. 1 000 000 by increment.\n"
                            + "Stop when long i will be 1 000 000. Share i value and time");
-
 
         cases.forEach(c -> {
             IncrementExample.resetValues();

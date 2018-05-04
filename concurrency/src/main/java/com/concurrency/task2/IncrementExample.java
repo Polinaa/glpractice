@@ -1,4 +1,4 @@
-package com.concurrency.arraytask.com.concurrency;
+package com.concurrency.task2;
 
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;

@@ -1,4 +1,4 @@
-package com.concurrency.arraytask.com.concurrency.cases;
+package com.concurrency.task2.cases;
 
 public interface Case {
     String getDescription();

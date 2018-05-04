@@ -1,6 +1,6 @@
-package com.concurrency.arraytask.com.concurrency.cases;
+package com.concurrency.task2.cases;
 
-import com.concurrency.arraytask.com.concurrency.IncrementExample;
+import com.concurrency.task2.IncrementExample;
 
 public class Case1 implements Case {
     private IncrementExample incrementExample;
