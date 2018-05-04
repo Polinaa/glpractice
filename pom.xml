@@ -13,7 +13,7 @@
         <module>flowerweb</module>
         <module>flowergarden</module>
         <module>RESTfulExample</module>
-        <module>com.concurrency.arraytask.com.concurrency</module>
+        <module>concurrency</module>
     </modules>
 
     <dependencies>
